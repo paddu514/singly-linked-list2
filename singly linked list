@@ -1,0 +1,85 @@
+package main
+
+import "fmt"
+
+
+type Node struct {
+	id   int
+	name string
+	ptr  *Node
+}
+
+
+type LinkedList struct {
+	head *Node
+}
+
+
+func (linkedlist *LinkedList) append(newnode *Node) *LinkedList {
+	if linkedlist.head == nil {
+		linkedlist.head = newnode
+		newnode.ptr = nil
+		return linkedlist
+	}
+	for n := linkedlist.head; n != nil; n = n.ptr {
+		if n.ptr == nil {
+			n.ptr = newnode
+			return linkedlist
+		}
+	}
+	return linkedlist
+}
+
+
+func (linkedlist *LinkedList) print() {
+	for n := linkedlist.head; n != nil; n = n.ptr {
+		fmt.Println(n.id, n.name, n.ptr)
+	}
+}
+
+
+func (linkedlist *LinkedList) insertBefore(name string, newNode *Node) bool {
+	if linkedlist.head == nil {
+		return false
+	}
+
+	ptrNode := linkedlist.head // points to first node
+	for ptrNode.ptr != nil {   // while() loop
+		if ptrNode.ptr.name == name {
+			newNode.ptr = ptrNode.ptr // new node points to the next node
+			ptrNode.ptr = newNode     // current node points to the new node
+			return true
+		}
+		ptrNode = ptrNode.ptr // points to next node
+	}
+	return false
+}
+
+func main() {
+
+	linkedlist := &LinkedList{}
+
+	
+	nodeA := &Node{1, "A", nil}
+	nodeB := &Node{2, "B", nil}
+	nodeC := &Node{3, "C", nil}
+	nodeD := &Node{4, "D", nil}
+	nodeE := &Node{5, "E", nil}
+
+	
+	linkedlist.append(nodeA)
+	linkedlist.append(nodeB)
+	linkedlist.append(nodeC)
+	linkedlist.append(nodeD)
+	linkedlist.append(nodeE)
+
+
+	linkedlist.print()
+
+
+	nodeF := &Node{6, "F", nil}
+	
+	linkedlist.insertBefore("B", nodeF)
+	
+	linkedlist.print()
+}
